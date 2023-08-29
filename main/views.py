@@ -10,12 +10,12 @@ class PeopleAPIView(APIView):
             #seleciona tudo!     
             peopleFound = People.objects.all() #select *from people; #PYTHON
             serializer = PeopleSerializer(peopleFound, many=True) #JSON
-            return Response(serializer.data) #devolvendo ao cliente o JSON!
+            return Response(status=200, data=serializer.data) #devolvendo ao cliente o JSON!
         #busca por people id:
         try:
             peopleFound = People.objects.get(id=peopleId) #select *from people where id = peopleId 
             serializer = PeopleSerializer(peopleFound, many=False) #JSON
-            return Response(serializer.data)
+            return Response(status=200,data=serializer.data)
         except People.DoesNotExist:
             return Response(status=404,  data="People not Found!!!!")
     
@@ -30,7 +30,40 @@ class PeopleAPIView(APIView):
             peopleSerialized.save()
             return Response(status=203, data=peopleSerialized.data)
         return Response(status=400, data="Mande certo seu imbecil!")
+    
+    def delete(self, request, peopleId = ''):
 
+        if(peopleId != ''):
+            #procurar a pessoa com o Id!
+            peopleFound = People.objects.get(id=peopleId)
+            #deletando o usuario encontrado!
+            peopleFound.delete()
+            return Response(status=200, data='People successfully deleted!')
+
+        #cliente da API não passou o peopleId para deletar!
+        return Response(status=400, data='PeopleId must be given!') 
+
+    def put(self, request, peopleId = ''):  
+         
+         if(peopleId != ''):
+             #procurar o antigo no banco:
+             peopleFound = People.objects.get(id=peopleId)
+
+             #coletar o novo que veio JSON:
+             peopleToUpdateJSON = request.data
+             
+             #faz o serializer substituir o novo pelo antigo e converter em python
+             serializedPeople = PeopleSerializer(peopleFound, data=peopleToUpdateJSON)
+
+             #verificar se a conversão é válida
+             if(serializedPeople.is_valid()):
+                 #salvo no banco de dadps
+                 serializedPeople.save()
+                 return Response(status=200, data=serializedPeople.data)
+             return Response(status=400, data='Invalid Data!')
+             
+         #cliente da API não passou o peopleId para editar!
+         return Response(status=400, data='PeopleId must be given!') 
 
 
 class PlanetAPIView(APIView):
