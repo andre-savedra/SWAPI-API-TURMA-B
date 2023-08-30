@@ -12,7 +12,10 @@ class PeopleAPIView(APIView):
             if 'name' in request.GET and 'eyeColor' in request.GET:
                 nameToFilter = request.GET['name']
                 eyeToFilter = request.GET['eyeColor']
-                peopleFound = People.objects.filter(name__contains=nameToFilter).filter(eyeColor__contains=eyeToFilter)                
+                #filtra por aqueles que possuem nome E cor igual
+                #peopleFound = People.objects.filter(name__contains=nameToFilter).filter(eyeColor__contains=eyeToFilter)                
+                #filtra por aqueles que possuem nome OU cor igual
+                peopleFound = People.objects.filter(name__contains=nameToFilter) | People.objects.filter(eyeColor__contains=eyeToFilter)                
             elif 'name' in request.GET:
                 #pegando o parâmetro que foi informado!
                 nameToFilter = request.GET['name']
