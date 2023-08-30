@@ -7,8 +7,23 @@ class PeopleAPIView(APIView):
     def get(self, request, peopleId = ''):
         #se o get não tiver o filtro de id:
         if peopleId == '':   
-            #seleciona tudo!     
-            peopleFound = People.objects.all() #select *from people; #PYTHON
+            peopleFound = ''
+            #se passarem o filtro de 'name'
+            if 'name' in request.GET and 'eyeColor' in request.GET:
+                nameToFilter = request.GET['name']
+                eyeToFilter = request.GET['eyeColor']
+                peopleFound = People.objects.filter(name__contains=nameToFilter).filter(eyeColor__contains=eyeToFilter)                
+            elif 'name' in request.GET:
+                #pegando o parâmetro que foi informado!
+                nameToFilter = request.GET['name']
+                #SELECT *FROM PEOPLE WHERE NAME LIKE %nameToFilter%;
+                peopleFound = People.objects.filter(name__contains=nameToFilter)
+            elif 'eyeColor' in request.GET:
+                eyeToFilter = request.GET['eyeColor']
+                peopleFound = People.objects.filter(eyeColor__contains=eyeToFilter)    
+            else:
+                #seleciona tudo!     
+                peopleFound = People.objects.all() #select *from people; #PYTHON
             serializer = PeopleSerializer(peopleFound, many=True) #JSON
             return Response(status=200, data=serializer.data) #devolvendo ao cliente o JSON!
         #busca por people id:
