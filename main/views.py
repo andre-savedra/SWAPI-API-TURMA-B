@@ -19,9 +19,11 @@ class PlanetAPIView(ModelViewSet):
      serializer_class = PlanetSerializer #informa o serializer   
      filter_backends = [DjangoFilterBackend] #usa a lib django-filter
      filterset_fields = ['name', 'diameter']
+     permission_classes = (IsAuthenticated,)       
 
 class StarshipAPIView(ModelViewSet):
      queryset = Starships.objects.all() #informa p/ a lib qual as consultas a serem feitas
      serializer_class = StarshipsSerializer #informa o serializer   
      filter_backends = [DjangoFilterBackend] #usa a lib django-filter
      filterset_fields = ['name', 'model', 'passengers']
+     permission_classes = (IsAuthenticated,)  
