@@ -22,4 +22,5 @@ urlpatterns = [
     path('',include('main.urls')),
     path('', include('djoser.urls')), #adiciona as rotas de gerenciamento de usuarios
     path('auth/', include('djoser.urls.authtoken')), #adiciona a rota de obter token
+    path('auth/', include('djoser.urls.jwt')),
 ]
