@@ -88,9 +88,13 @@ WSGI_APPLICATION = 'aula1.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME':'testeDjango', #nome do BANCO
+        'HOST':'127.0.0.1', #endereço do BANCO
+        'USER':'fms_root', #usuario do banco
+        'PASSWORD':'fmsroot', #senha do banco
+        'PORT':'3306',
+    }   
 }
 
 
